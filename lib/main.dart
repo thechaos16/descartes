@@ -16,7 +16,7 @@ class Descartes extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 192, 161, 245)),
         useMaterial3: true,
       ),
-      home: const MainPage(title: 'Flutter Demo Home Page'),
+      home: const MainPage(title: 'Descartes'),
     );
   }
 }
@@ -29,12 +29,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _counter = 0;
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  bool _clicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +38,40 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Container(
+        alignment: FractionalOffset.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'Cognito, ergo sum - Rene Descartes',
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  print(_clicked);
+                  _clicked = !_clicked;
+                });                
+              },
+              child: Container(
+                child: Text(
+                  _clicked ? 'clicked' : 'Cognito, ergo sum - Rene Descartes',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  )
+                ),
+              )
             ),
-            const Text(
+            Text(
               'Something to read',
             ),
-            const Text(
+            Text(
               'Something to think',
             ),
-            const Text(
+            Text(
               'Something to write',
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), 
     );
   }
 }
