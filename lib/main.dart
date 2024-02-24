@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import "subpage.dart";
+
 void main() {
   runApp(const Descartes());
 }
@@ -60,14 +62,41 @@ class _MainPageState extends State<MainPage> {
                 ),
               )
             ),
-            Text(
-              'Something to read',
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const SubPage(title: "Something to READ!!!");
+                }));
+              },
+              child: Container(
+                child: Text(
+                  'Something to read'
+                )
+              )
             ),
-            Text(
-              'Something to think',
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const SubPage(title: "Something to THINK!!!");
+                }));
+              },
+              child: Container(
+                child: Text(
+                  'Something to thinks'
+                )
+              )
             ),
-            Text(
-              'Something to write',
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const SubPage(title: "Something to WRITE!!!");
+                }));
+              },
+              child: Container(
+                child: Text(
+                  'Something to write'
+                )
+              )
             ),
           ],
         ),
