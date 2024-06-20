@@ -10,15 +10,27 @@ class SubPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(246, 179, 241, 192),
         title: Text(title),
       ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Go back'),
-        ),
+      body: Container(
+        alignment: FractionalOffset.center,
+        child: Column(
+          children: <Widget>[
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter a url',
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Go back'),
+            ),
+          ],
+        )
       ),
     );
   }

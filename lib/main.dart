@@ -65,36 +65,24 @@ class _MainPageState extends State<MainPage> {
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const SubPage(title: "Something to READ!!!");
+                  return const SubPage(title: "Register new URI");
                 }));
               },
               child: Container(
                 child: Text(
-                  'Something to read'
+                  'Register new URI'
                 )
               )
             ),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const SubPage(title: "Something to THINK!!!");
+                  return const SubPage(title: "DATABASE!");
                 }));
               },
               child: Container(
                 child: Text(
-                  'Something to thinks'
-                )
-              )
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const SubPage(title: "Something to WRITE!!!");
-                }));
-              },
-              child: Container(
-                child: Text(
-                  'Something to write'
+                  'View database'
                 )
               )
             ),
