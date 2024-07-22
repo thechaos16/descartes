@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-import "subpage.dart";
+import 'uri_register_page.dart';
+import 'db_viewer.dart';
+import 'landing_page.dart';
 
 void main() {
   runApp(const Descartes());
@@ -50,14 +52,30 @@ class _MainPageState extends State<MainPage> {
                 setState(() {
                   print(_clicked);
                   _clicked = !_clicked;
-                });                
+                });
               },
               child: Container(
                 child: Text(
-                  _clicked ? 'clicked' : 'Cognito, ergo sum - Rene Descartes',
+                  'Cognito, ergo sum\n',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 30,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const UriRegisterPage(title: "Register new URI");
+                }));
+              },
+              child: Container(
+                child: Text(
+                  'Register new URI',
+                  style: TextStyle(
+                    fontSize: 22,
                   )
                 ),
               )
@@ -65,24 +83,30 @@ class _MainPageState extends State<MainPage> {
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const SubPage(title: "Register new URI");
+                  return const DBViewPage(title: "DATABASE!");
                 }));
               },
               child: Container(
                 child: Text(
-                  'Register new URI'
+                  'View database',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
                 )
               )
             ),
             GestureDetector(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const SubPage(title: "DATABASE!");
+                  return const LandingPage(uri: "https://naver.com");
                 }));
               },
               child: Container(
                 child: Text(
-                  'View database'
+                  'Push landed page',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
                 )
               )
             ),
