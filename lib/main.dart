@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'uri_register_page.dart';
 import 'db_viewer.dart';
 import 'landing_page.dart';
+import "db.dart";
+import 'constants.dart';
 
 void main() {
   runApp(const Descartes());
@@ -28,12 +30,14 @@ class Descartes extends StatelessWidget {
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.title});
   final String title;
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   bool _clicked = false;
+  String pushUri = "https://google.com";
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +101,13 @@ class _MainPageState extends State<MainPage> {
             ),
             GestureDetector(
               onTap: () {
+                final result = selectRandomUri(dbName);
+                result.then((data){
+                    pushUri = data.toString();
+                  },
+                );
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return const LandingPage(uri: "https://naver.com");
+                  return LandingPage(uri: pushUri);
                 }));
               },
               child: Container(
