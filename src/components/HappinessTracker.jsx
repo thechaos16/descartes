@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Clock, Smile, Tag, PlusCircle, Calendar, Briefcase, Users, Gamepad, Sparkles, Sun } from 'lucide-react';
+import { Smile, Tag, PlusCircle, Calendar, Briefcase, Users, Gamepad, Sparkles, Sun, Bell, BellOff, Clock, Send, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { usePushAlarm } from '../hooks/usePushAlarm';
 import './HappinessTracker.css';
 
 const getInitialDate = () => {
@@ -11,6 +12,15 @@ const HappinessTracker = ({ onAddEntry }) => {
   const [date, setDate] = useState(getInitialDate());
   const [moment, setMoment] = useState('');
   const [category, setCategory] = useState('other');
+
+  const {
+    enabled,
+    alarmTime,
+    permission,
+    toggleAlarm,
+    changeAlarmTime,
+    testAlarm
+  } = usePushAlarm();
 
   const categories = [
     { id: 'work', label: 'Work & Learning', icon: Briefcase, colorVar: 'var(--label-work)' },
@@ -42,7 +52,78 @@ const HappinessTracker = ({ onAddEntry }) => {
   };
 
   return (
-    <div className="tracker-wrapper">
+    <div className="tracker-wrapper flex-col gap-6">
+      {/* Alarm Settings Card */}
+      <div className="glass-panel alarm-card animate-fade-in">
+        <div className="alarm-card-header">
+          <div className="alarm-title-group">
+            <div className={`alarm-icon-badge ${enabled ? 'active' : ''}`}>
+              {enabled ? <Bell size={20} /> : <BellOff size={20} />}
+            </div>
+            <div>
+              <h3>Daily Happiness Logging Alarm</h3>
+              <p className="alarm-subtitle">
+                Receive a daily push notification every day at <strong>{alarmTime}</strong> to log your day's happy moments.
+              </p>
+            </div>
+          </div>
+          
+          <label className="switch" title="Toggle 23:00 Push Alarm">
+            <input 
+              type="checkbox" 
+              checked={enabled} 
+              onChange={(e) => toggleAlarm(e.target.checked)} 
+            />
+            <span className="slider round"></span>
+          </label>
+        </div>
+
+        <div className="alarm-card-body">
+          <div className="alarm-setting-row">
+            <div className="alarm-time-picker">
+              <Clock size={16} />
+              <label htmlFor="alarm-time-select">Alert Time:</label>
+              <input 
+                id="alarm-time-select"
+                type="time" 
+                className="input-field alarm-time-input"
+                value={alarmTime}
+                onChange={(e) => changeAlarmTime(e.target.value)}
+              />
+            </div>
+
+            <div className="permission-badge">
+              {permission === 'granted' && (
+                <span className="badge badge-success">
+                  <CheckCircle2 size={13} /> Push Permission Granted
+                </span>
+              )}
+              {permission === 'denied' && (
+                <span className="badge badge-warning" title="Please enable notifications in your browser settings">
+                  <AlertCircle size={13} /> Permission Denied
+                </span>
+              )}
+              {permission === 'default' && (
+                <span className="badge badge-info">
+                  <AlertCircle size={13} /> Permission Prompt Required
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="alarm-actions">
+            <button 
+              type="button" 
+              className="btn-secondary test-alarm-btn"
+              onClick={testAlarm}
+            >
+              <Send size={15} /> Send Test Alert Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Happiness Entry Form */}
       <div className="glass-panel tracker-card animate-fade-in">
         <div className="tracker-header">
           <div className="icon-wrapper happiness-icon-wrapper">
@@ -65,7 +146,6 @@ const HappinessTracker = ({ onAddEntry }) => {
               required
             />
           </div>
-
 
           <div className="form-group">
             <label htmlFor="moment-input">
@@ -125,3 +205,4 @@ const HappinessTracker = ({ onAddEntry }) => {
 };
 
 export default HappinessTracker;
+

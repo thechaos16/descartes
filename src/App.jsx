@@ -8,6 +8,7 @@ import TodoCalendar from './components/TodoCalendar';
 import BookmarksPage from './components/BookmarksPage';
 import HappinessTracker from './components/HappinessTracker';
 import HappinessHistory from './components/HappinessHistory';
+import { usePushAlarm } from './hooks/usePushAlarm';
 import { PlusCircle, List, LogOut, CheckSquare, Utensils, Bookmark, Smile } from 'lucide-react';
 import './App.css';
 
@@ -109,6 +110,10 @@ function App() {
   const [entries, setEntries] = useState([]);
   const [happinessEntries, setHappinessEntries] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Initialize global Push Alarm listener
+  usePushAlarm();
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
