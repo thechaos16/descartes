@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Smile, Tag, PlusCircle, Calendar, Briefcase, Users, Gamepad, Sparkles, Sun, Bell, BellOff, Clock, Send, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Smile, Tag, PlusCircle, Calendar, Briefcase, Users, Gamepad, Sparkles, Sun, Bell, BellOff, Clock, Send, AlertCircle, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
 import { usePushAlarm } from '../hooks/usePushAlarm';
 import './HappinessTracker.css';
 
@@ -12,6 +12,7 @@ const HappinessTracker = ({ onAddEntry }) => {
   const [date, setDate] = useState(getInitialDate());
   const [moment, setMoment] = useState('');
   const [category, setCategory] = useState('other');
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const {
     enabled,
@@ -53,75 +54,94 @@ const HappinessTracker = ({ onAddEntry }) => {
 
   return (
     <div className="tracker-wrapper flex-col gap-6">
-      {/* Alarm Settings Card */}
-      <div className="glass-panel alarm-card animate-fade-in">
+      {/* Alarm Settings Card (Compact by default) */}
+      <div className={`glass-panel alarm-card ${isExpanded ? 'expanded' : 'compact'} animate-fade-in`}>
         <div className="alarm-card-header">
           <div className="alarm-title-group">
             <div className={`alarm-icon-badge ${enabled ? 'active' : ''}`}>
-              {enabled ? <Bell size={20} /> : <BellOff size={20} />}
+              {enabled ? <Bell size={18} /> : <BellOff size={18} />}
             </div>
-            <div>
-              <h3>Daily Happiness Logging Alarm</h3>
-              <p className="alarm-subtitle">
-                Receive a daily push notification every day at <strong>{alarmTime}</strong> to log your day's happy moments.
-              </p>
+            <div className="alarm-header-text">
+              <span className="alarm-title-text">Daily Push Alarm</span>
+              <span className={`alarm-status-pill ${enabled ? 'status-on' : 'status-off'}`}>
+                {enabled ? `ON (${alarmTime})` : 'OFF'}
+              </span>
             </div>
           </div>
           
-          <label className="switch" title="Toggle 23:00 Push Alarm">
-            <input 
-              type="checkbox" 
-              checked={enabled} 
-              onChange={(e) => toggleAlarm(e.target.checked)} 
-            />
-            <span className="slider round"></span>
-          </label>
-        </div>
-
-        <div className="alarm-card-body">
-          <div className="alarm-setting-row">
-            <div className="alarm-time-picker">
-              <Clock size={16} />
-              <label htmlFor="alarm-time-select">Alert Time:</label>
+          <div className="alarm-header-controls">
+            <label className="switch" title="Toggle Push Alarm">
               <input 
-                id="alarm-time-select"
-                type="time" 
-                className="input-field alarm-time-input"
-                value={alarmTime}
-                onChange={(e) => changeAlarmTime(e.target.value)}
+                type="checkbox" 
+                checked={enabled} 
+                onChange={(e) => toggleAlarm(e.target.checked)} 
               />
-            </div>
+              <span className="slider round"></span>
+            </label>
 
-            <div className="permission-badge">
-              {permission === 'granted' && (
-                <span className="badge badge-success">
-                  <CheckCircle2 size={13} /> Push Permission Granted
-                </span>
-              )}
-              {permission === 'denied' && (
-                <span className="badge badge-warning" title="Please enable notifications in your browser settings">
-                  <AlertCircle size={13} /> Permission Denied
-                </span>
-              )}
-              {permission === 'default' && (
-                <span className="badge badge-info">
-                  <AlertCircle size={13} /> Permission Prompt Required
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="alarm-actions">
             <button 
-              type="button" 
-              className="btn-secondary test-alarm-btn"
-              onClick={testAlarm}
+              type="button"
+              className="alarm-expand-btn"
+              onClick={() => setIsExpanded(!isExpanded)}
+              title={isExpanded ? 'Collapse alarm details' : 'Expand alarm settings'}
+              aria-expanded={isExpanded}
             >
-              <Send size={15} /> Send Test Alert Now
+              {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
             </button>
           </div>
         </div>
+
+        {isExpanded && (
+          <div className="alarm-card-body animate-fade-in">
+            <p className="alarm-subtitle">
+              Receive a daily push notification every day at <strong>{alarmTime}</strong> to log your day's happy moments.
+            </p>
+
+            <div className="alarm-setting-row">
+              <div className="alarm-time-picker">
+                <Clock size={16} />
+                <label htmlFor="alarm-time-select">Alert Time:</label>
+                <input 
+                  id="alarm-time-select"
+                  type="time" 
+                  className="input-field alarm-time-input"
+                  value={alarmTime}
+                  onChange={(e) => changeAlarmTime(e.target.value)}
+                />
+              </div>
+
+              <div className="permission-badge">
+                {permission === 'granted' && (
+                  <span className="badge badge-success">
+                    <CheckCircle2 size={13} /> Push Permission Granted
+                  </span>
+                )}
+                {permission === 'denied' && (
+                  <span className="badge badge-warning" title="Please enable notifications in your browser settings">
+                    <AlertCircle size={13} /> Permission Denied
+                  </span>
+                )}
+                {permission === 'default' && (
+                  <span className="badge badge-info">
+                    <AlertCircle size={13} /> Permission Prompt Required
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="alarm-actions">
+              <button 
+                type="button" 
+                className="btn-secondary test-alarm-btn"
+                onClick={testAlarm}
+              >
+                <Send size={15} /> Send Test Alert Now
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
 
       {/* Main Happiness Entry Form */}
       <div className="glass-panel tracker-card animate-fade-in">
