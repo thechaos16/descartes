@@ -8,7 +8,7 @@ import TodoCalendar from './components/TodoCalendar';
 import BookmarksPage from './components/BookmarksPage';
 import HappinessTracker from './components/HappinessTracker';
 import HappinessHistory from './components/HappinessHistory';
-import { usePushAlarm } from './hooks/usePushAlarm';
+import { PushAlarmProvider } from './context/PushAlarmProvider';
 import { PlusCircle, List, LogOut, CheckSquare, Utensils, Bookmark, Smile } from 'lucide-react';
 import './App.css';
 
@@ -110,10 +110,6 @@ function App() {
   const [entries, setEntries] = useState([]);
   const [happinessEntries, setHappinessEntries] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Initialize global Push Alarm listener
-  usePushAlarm();
-
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -312,25 +308,27 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <div className="app-container">
-        <Navigation session={session} />
-        <main className="main-content">
-          {loading ? (
-            <div className="loading-state">Loading your data...</div>
-          ) : (
-            <Routes>
-              <Route path="/" element={<FoodTracker onAddEntry={addEntry} />} />
-              <Route path="/history" element={<HistoryPage entries={entries} onDeleteEntry={deleteEntry} onUpdateEntry={updateEntry} />} />
-              <Route path="/happiness" element={<HappinessTracker onAddEntry={addHappinessEntry} />} />
-              <Route path="/happiness/history" element={<HappinessHistory entries={happinessEntries} onDeleteEntry={deleteHappinessEntry} onUpdateEntry={updateHappinessEntry} />} />
-              <Route path="/todos" element={<TodoCalendar />} />
-              <Route path="/bookmarks" element={<BookmarksPage />} />
-            </Routes>
-          )}
-        </main>
-      </div>
-    </BrowserRouter>
+    <PushAlarmProvider>
+      <BrowserRouter>
+        <div className="app-container">
+          <Navigation session={session} />
+          <main className="main-content">
+            {loading ? (
+              <div className="loading-state">Loading your data...</div>
+            ) : (
+              <Routes>
+                <Route path="/" element={<FoodTracker onAddEntry={addEntry} />} />
+                <Route path="/history" element={<HistoryPage entries={entries} onDeleteEntry={deleteEntry} onUpdateEntry={updateEntry} />} />
+                <Route path="/happiness" element={<HappinessTracker onAddEntry={addHappinessEntry} />} />
+                <Route path="/happiness/history" element={<HappinessHistory entries={happinessEntries} onDeleteEntry={deleteHappinessEntry} onUpdateEntry={updateHappinessEntry} />} />
+                <Route path="/todos" element={<TodoCalendar />} />
+                <Route path="/bookmarks" element={<BookmarksPage />} />
+              </Routes>
+            )}
+          </main>
+        </div>
+      </BrowserRouter>
+    </PushAlarmProvider>
   );
 }
 
